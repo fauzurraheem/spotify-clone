@@ -17,12 +17,14 @@ const Center = () => {
   const {playlistId, setPlaylist , playlist} = useContext(SongContext)
 
   useEffect(() => {
-    spotifyApi
+    if(playlistId){
+      spotifyApi
       .getPlaylist(playlistId)
       .then((data) => {
         setPlaylist(data.body);
       })
       .catch((err) => console.log("somethinng wrong", err));
+    }
    
   }, [spotifyApi, playlistId]);
 
@@ -44,9 +46,9 @@ const Center = () => {
   },[playlist])
 
 
-  console.log(playlistId, playlist);
 
 
+ 
 
 
   return (
@@ -70,22 +72,15 @@ const Center = () => {
           <section
           className={`flex items-end space-x-7 bg-gradient-to-b to-black ${color} h-80 text-white  p-8`}
         >
-          {/* <img src="" alt="" /> */}
-          <img
-            className="h-44 w-44 shadow-2xl"
-            src=""
-            alt=""
-          />
+          <div className="h-44 w-44 shadow-2xl bg-black"></div>
           <div>
             <p>PLAYLIST</p>
-            <h1 className="text-2xl md:text-3xl xl:text-5xl">{playlist?.name}</h1>
           </div>
         </section>
         ) : (
           <section
         className={`flex items-end space-x-7 bg-gradient-to-b to-black ${color} h-80 text-white  p-8`}
       >
-        {/* <img src="" alt="" /> */}
         <img
           className="h-44 w-44 shadow-2xl"
           src={playlist?.images?.[0]?.url}

@@ -1,7 +1,7 @@
 import {AiOutlineHome} from 'react-icons/ai'
 import {AiOutlineSearch} from 'react-icons/ai'
 import {HiOutlineLibrary} from 'react-icons/hi'
-import {FiHeart} from 'react-icons/fi'
+import {BsHeartFill} from 'react-icons/bs'
 import {AiOutlinePlusCircle} from 'react-icons/ai'
 import {AiOutlineWifi} from 'react-icons/ai'
 import { signOut, useSession } from 'next-auth/react'
@@ -18,13 +18,15 @@ const SideBar = () => {
   const {data:session, status} = useSession()
   const [playlists, setPlaylists] = useState([])
   // const [playlistId, setplaylistId] = useRecoilState(playlistIdState)
-  const { setplaylistId} = useContext(SongContext)
+  const { setplaylistId,playlistsId} = useContext(SongContext)
   
 
   useEffect(() => {
     if(spotifyApi.getAccessToken()) {
       spotifyApi.getUserPlaylists().then(data => {
         setPlaylists(data.body.items);
+        setplaylistId(data.body.items[0.].id)
+
       })
     }
 
@@ -32,10 +34,14 @@ const SideBar = () => {
   },[session, spotifyApi])
 
 
+ 
+
+
+
 
 
   return (
-    <div className='text-gray-500 p-5 text-xs border-r border-gray-900 scrollbar-hide overflow-y-scroll h-screen lg:text-sm sm:max-w-[12rem] lg:max-w-[15rem] hidden md:inline-flex'>
+    <div className='text-gray-500 p-5 text-xs border-r border-gray-900 scrollbar-hide overflow-y-scroll h-screen lg:text-sm sm:max-w-[12rem] lg:max-w-[15rem] hidden md:inline-flex pb-36'>
       <div className='space-y-4'>
         <button className='flex items-center space-x-2 hover:text-white' >
           <AiOutlineHome className='h-5 w-5' />
@@ -56,11 +62,11 @@ const SideBar = () => {
           <p>Create Playlist</p>
         </button>
         <button className='flex items-center space-x-2 hover:text-white' >
-          <FiHeart className='h-5 w-5' />
+          <BsHeartFill className='h-5 w-5  text-blue-500' />
           <p>Liked Songs</p>
         </button>
         <button className='flex items-center space-x-2 hover:text-white' >
-          <AiOutlineWifi className='h-5 w-5' />
+          <AiOutlineWifi className='h-5 w-5 text-green-500' />
           <p>Your episodes</p>
         </button>
         <hr  className='border-t-[0.1px] border-gray-900'/>

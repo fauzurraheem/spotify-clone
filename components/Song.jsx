@@ -1,10 +1,30 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import SongContext from '../context/songContext'
+import useSpotify from '../hooks/useSpotify'
 import { millisToMinutesAndSeconds } from '../lib/time'
 
 const Song = ({order, track}) => {
-  console.log(track)
+  const spotifyApi = useSpotify()
+  const {setCurrentTrackId,setIsPlaying,isPlaying,currentTrackId} = useContext(SongContext)
+
+
+  const playSong = () => {
+    setCurrentTrackId(track.track.id);
+    setIsPlaying(true);
+    spotifyApi.play({
+      uris:[track.track.uri]
+    }).catch(err => window.alert('Premium Access Is Needed To Play This Song'))
+
+  }
+
+
+
+
+
+
+
   return (
-    <div className='grid grid-cols-2 text-gray-500 py-4 px-5 hover:bg-gray-900 rounded-lg cursor-pointer'>
+    <div className='grid grid-cols-2 text-gray-500 py-4 px-5 hover:bg-gray-900 rounded-lg cursor-pointer' onClick={playSong}>
       <div className='flex items-center space-x-4'>
         <p>{order + 1}</p>
         <img className='h-10 w-10' src={track.track.album.images[0].url} alt="" />

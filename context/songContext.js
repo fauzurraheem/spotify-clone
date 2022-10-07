@@ -8,14 +8,16 @@ const SongContext = createContext();
 
 
 export function Songs({children}) {
-    const [playlistId, setplaylistId] = useState('2oBe8AfhwP13N76x4mipGn')
+    const [playlistId, setplaylistId] = useState('')
     const [playlist, setPlaylist] = useState(null)
+    const [currentTrackId, setCurrentTrackId] = useState(null)
+    const [isPlaying, setIsPlaying] = useState(false)
 
 
 
  
   return (
-    <SongContext.Provider value={{playlist, setPlaylist, playlistId, setplaylistId,}}>
+    <SongContext.Provider value={{playlist, setPlaylist, playlistId, setplaylistId,setCurrentTrackId,setIsPlaying,isPlaying,currentTrackId}}>
       {children}
     </SongContext.Provider>
   );
