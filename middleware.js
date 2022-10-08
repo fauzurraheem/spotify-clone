@@ -10,8 +10,7 @@ export async function middleware(req){
 
   const {pathname, origin} = req.nextUrl
 
- 
-  const url = req.nextUrl.clone()
+
 
 
 
