@@ -24,6 +24,7 @@ import { debounce } from 'lodash'
 const Player = () => {
   const spotifyApi = useSpotify()
   const {data:session, status} = useSession()
+  const [id, setId] = useState('')
   const {setCurrentTrackId,setIsPlaying,isPlaying,currentTrackId} = useContext(SongContext)
   const [volume, setVolume] = useState(50)
 
@@ -35,6 +36,7 @@ const Player = () => {
         limit : 1
       }).then(data => {
         setCurrentTrackId(data.body.items[0].track.id);
+        setId(data.body.items[0].track.id)
  
 
         spotifyApi.getMyCurrentPlaybackState().then(data => {
@@ -48,17 +50,22 @@ const Player = () => {
   }
 
   const handlePlayPause = () => {
-    spotifyApi.getMyCurrentPlaybackState().then(data => {
-      console.log(data)
-      if(data.body.is_playing){
-        spotifyApi.pause();
-        setIsPlaying(false)
-        console.log(data.body.is_playing)
-      }else{
-        spotifyApi.play();
-        setIsPlaying(true)
-      }
-    })
+    if(currentTrackId === id){
+      window.alert('pick another song')
+    }else{
+      spotifyApi.getMyCurrentPlaybackState().then(data => {
+        console.log(data)
+        if(data.body.is_playing){
+          spotifyApi.pause();
+          setIsPlaying(false)
+          console.log(data.body.is_playing)
+        }else{
+          spotifyApi.play();
+          setIsPlaying(true)
+        }
+      })
+    }
+    
   }
 
   useEffect(() => {
