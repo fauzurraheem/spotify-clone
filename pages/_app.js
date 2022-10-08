@@ -4,6 +4,9 @@ import { Songs } from '../context/songContext'
 import '../styles/globals.css'
 
 function MyApp({ Component, pageProps: { session, ...pageProps }, }) {
+
+
+
   return (
     <SessionProvider session={session}>
       <Songs>

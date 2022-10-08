@@ -7,7 +7,10 @@ import SideBar from '../components/SideBar'
 
 
 
+
 export default function Home() {
+
+
   return (
     <div className='bg-black h-screen overflow-hidden'>
       <Head>
@@ -30,6 +33,15 @@ export default function Home() {
 export async function getServerSideProps(context){
 
   const session = await getSession(context)
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    }
+  }
 
   return {
     props: {

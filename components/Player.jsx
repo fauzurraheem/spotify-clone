@@ -25,14 +25,17 @@ const Player = () => {
   const spotifyApi = useSpotify()
   const {data:session, status} = useSession()
   const {setCurrentTrackId,setIsPlaying,isPlaying,currentTrackId} = useContext(SongContext)
-  const [volume, setVolume] = useState()
+  const [volume, setVolume] = useState(50)
 
   const songInfo = useSongInfo()
 
   const fetchCurrentSong = () => {
     if(!songInfo){
-      spotifyApi.getMyCurrentPlayingTrack().then(data => {
-        setCurrentTrackId(data.body.item.id);
+      spotifyApi.getMyRecentlyPlayedTracks({
+        limit : 1
+      }).then(data => {
+        setCurrentTrackId(data.body.items[0].track.id);
+ 
 
         spotifyApi.getMyCurrentPlaybackState().then(data => {
           setIsPlaying(data.body?.is_playing)
@@ -46,9 +49,11 @@ const Player = () => {
 
   const handlePlayPause = () => {
     spotifyApi.getMyCurrentPlaybackState().then(data => {
+      console.log(data)
       if(data.body.is_playing){
         spotifyApi.pause();
         setIsPlaying(false)
+        console.log(data.body.is_playing)
       }else{
         spotifyApi.play();
         setIsPlaying(true)
@@ -66,14 +71,14 @@ const Player = () => {
 
   useEffect(() => {
     if(volume > 0 && volume < 100){
-      // debounceAdjustVolume(volume)
+      debounceAdjustVolume(volume)
     }
   },[volume])
 
   const debounceAdjustVolume = useCallback(
-    // debounce(volume => {
-    //   spotifyApi.setVolume(volume).catch(err => {});
-    // },500)
+    debounce(volume => {
+      spotifyApi.setVolume(volume).catch(err => {});
+    },500)
   )
 
 
@@ -93,7 +98,7 @@ const Player = () => {
         <HiSwitchHorizontal className='button' />
         <TiMediaRewind className='button' onClick={() => spotifyApi.skipToPrevious()} />
 
-        {isPlaying ? (<AiFillPlayCircle onClick={handlePlayPause} className='button w-10 h-10'/>):(<AiFillPauseCircle onClick={handlePlayPause} className='button w-10 h-10' />)}
+        {!isPlaying ? (<AiFillPlayCircle onClick={handlePlayPause} className='button w-10 h-10'/>):(<AiFillPauseCircle onClick={handlePlayPause} className='button w-10 h-10' />)}
 
         <TiMediaFastForward  
         onClick={() => spotifyApi.skipToNext()}

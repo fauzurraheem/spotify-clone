@@ -12,9 +12,10 @@ export async function middleware(req){
 
  
   const url = req.nextUrl.clone()
-  url.pathname = `/login`
 
-//  console.log( url)
+
+
+//  console.log(pathname, token)
 
 
   //Allow the request if the following is true
@@ -27,7 +28,12 @@ export async function middleware(req){
 
   //redirect them to login if they dont hvae token and are requesting a protected route
 
-  // if(!token && pathname !== '/login'){
-  //   return NextResponse.rewrite(new URL(url,req.nextUrl))
-  // }
+  if(token === null || pathname !== '/login'){
+
+  //  return NextResponse.redirect(new URL('/login'));
+  }
 }
+
+// export const config = {
+//   matcher: '/login/:path*',
+// }
